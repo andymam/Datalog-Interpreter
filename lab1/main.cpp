@@ -1,7 +1,9 @@
 #include <iostream>
-#include <Token.h>
+#include "Token.h"
+# include "Scanner.h"
 
 int main() {
-  Token t = Token(COMMA, ",", 2);
+  Scanner s = Scanner("  ,  ,  ");
+  Token t = s.scanToken();
   cout << t.toString() << endl;
 }
