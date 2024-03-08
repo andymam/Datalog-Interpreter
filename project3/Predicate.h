@@ -28,6 +28,18 @@ public:
         return name;
     }
 
+    vector<Parameter> getParameters() {
+        return parameters;
+    }
+
+    vector<string> getParamStrings() {
+        vector<string> paramStrings;
+        for (auto &param : parameters) {
+            paramStrings.push_back(param.getName());
+        }
+        return paramStrings;
+    }
+
         
     string toString() {
         stringstream out;

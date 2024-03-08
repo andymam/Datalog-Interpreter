@@ -49,7 +49,17 @@ public:
         return schemes;
     }
 
-//    facts, rules, queries, domain
+    vector<Predicate> getFacts() {
+        return facts;
+    }
+
+    vector<Rule> getRules() {
+        return rules;
+    }
+
+    vector<Predicate> getQueries() {
+        return queries;
+    }
 
 	string printSchemes() {
 		stringstream out;
