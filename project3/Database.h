@@ -12,7 +12,6 @@
 class Database : public map<string, Relation> {
 public:
     Database() {};
-    ~Database() {}
 
 };
 

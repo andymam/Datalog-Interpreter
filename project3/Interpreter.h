@@ -26,20 +26,66 @@ private:
 public:
     Interpreter() {}
     Interpreter(DatalogProgram datalog) {
-    datalogProgram = datalog;
-    schemes = datalog.getSchemes();
-    facts = datalog.getFacts();
-    queries = datalog.getQueries();
-    rules = datalog.getRules();
-    domain = datalog.getDomain();
+        datalogProgram = datalog;
+        schemes = datalog.getSchemes();
+        facts = datalog.getFacts();
+        queries = datalog.getQueries();
+        rules = datalog.getRules();
+        domain = datalog.getDomain();
+
+        evaluateSchemes();
+        evaluateFacts();
     }
 
     void evaluateQueries() {
+        for (unsigned int i = 0; i < queries.size(); ++i) {
+            vector<string> queryVector = queries.at(i).getParamStrings();
+            string predName = queries.at(i).getName();
+            cout << queries.at(i).getName() << '(';
 
+            for (unsigned int j = 0; j < queryVector.size(); ++j) {
+                cout << queryVector.at(j);
+                if (j < queryVector.size() - 1) {
+                    cout << ',';
+                } else {
+                    cout << ")? ";
+                }
+            }
+
+            evaluateUnoQuery(queryVector, predName);
+        }
     }
 
-    void evaluateUnoQuery() {
+    Relation evaluateUnoQuery(vector<string> queryVector, string predicateName) {
+        Relation relation = database.at(predicateName);
+        map<string, int> variables;
+        vector<string> varNames;
 
+        for (unsigned int i = 0; i < queryVector.size(); ++i) {
+            if (queryVector.at(i).at(0) == '\'') {
+                relation = relation.select(i, queryVector.at(i));
+            } else {
+                if (variables.find(queryVector.at(i)) != variables.end()) {
+                    relation = relation.select(i, variables.at(queryVector.at(i)));
+                } else {
+                    variables.insert(make_pair(queryVector.at(i), i));
+                    varNames.push_back(queryVector.at(i));
+                }
+            }
+        }
+        if (relation.getTuplesLength() > 0) {
+            cout << "Yes(" << relation.getTuplesLength() << ')' << endl;
+        } else {
+            cout << "No" << endl;
+        }
+
+        relation = relation.project(variables, varNames);
+        relation = relation.rename(varNames);
+
+        if (!relation.schemeBeEmpty()) {
+            cout << relation.printTuples();
+        }
+        return relation;
     }
 
     void evaluateSchemes() {
@@ -54,7 +100,7 @@ public:
             }
 
             Relation relation(schemeName, scheme);
-            database.insert(make_pair(schemeName, relation));
+            database.insert(pair<string, Relation>(schemeName, relation));
         }
 
     }

@@ -7,24 +7,30 @@
 #include "DatalogProgram.h"
 using namespace std;
 
-class Parser {
+class Parser
+{
 private:
     vector<Token> tokens;
     DatalogProgram datalog;
-    
+
 public:
-    Parser(const vector<Token>& tokens) : tokens(tokens) { }
+    Parser(const vector<Token> &tokens) : tokens(tokens) {}
 
     TokenType tokenType() const {
         return tokens.at(0).getType();
     }
 
-    DatalogProgram getDatalogProgram() {
+    DatalogProgram getDatalog() {
         return datalog;
     }
 
     void advanceToken() {
         tokens.erase(tokens.begin());
+    }
+
+    void throwError(Token badToken) {
+        cout << "Failure!" << endl;
+        cout << "  " << badToken.toString() << endl;
     }
 
     void match(TokenType t) {
@@ -33,13 +39,12 @@ public:
         } else {
             throw tokens.at(0);
         }
-
     }
 
     void parse() {
         try {
             parseDatalog();
-            printSuccess();
+//            printSuccess();
         } catch (Token badToken) {
             throwError(badToken);
         }
@@ -52,11 +57,6 @@ public:
         cout << datalog.printRules();
         cout << datalog.printQueries();
         cout << datalog.printDomain();
-    }
-
-    void throwError(Token token) {
-        cout << "Failure!" << endl;
-        cout << "  " << token.toString() << endl;
     }
 
     void parseDatalog() {
@@ -94,8 +94,8 @@ public:
             throw tokens.at(0);
         }
 
-        if (tokenType() == EOFILE) {
-        // don't do anything for now
+        if (tokenType() == ENDOF) {
+            // don't do anything for now
         } else {
             throw tokens.at(0);
         }
@@ -127,7 +127,7 @@ public:
             // lambda
         }
     }
-    
+
     void queryList() {
         if (tokenType() == ID) {
             query();
@@ -252,17 +252,17 @@ public:
         if (tokenType() == ID) {
             Predicate pred(tokens.at(0).getValue());
 
-			match(ID);
-			match(LEFT_PAREN);
+            match(ID);
+            match(LEFT_PAREN);
 
-			Parameter param(tokens.at(0).getValue());
-			pred.addParameter(param);
+            Parameter param(tokens.at(0).getValue());
+            pred.addParameter(param);
 
-			parameter();
-			parameterList(pred);
-			match(RIGHT_PAREN);
-            
-			rule.addBodyPreds(pred);
+            parameter();
+            parameterList(pred);
+            match(RIGHT_PAREN);
+
+            rule.addBodyPredicate(pred);
         } else {
             throw tokens.at(0);
         }

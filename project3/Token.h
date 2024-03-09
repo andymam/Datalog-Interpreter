@@ -1,11 +1,10 @@
 #pragma once
-#include <iostream>
-#include <fstream>
+#include <string>
 #include <sstream>
-
 using namespace std;
 
-enum TokenType {
+enum TokenType
+{
     COMMA,
     PERIOD,
     Q_MARK,
@@ -22,25 +21,22 @@ enum TokenType {
     ID,
     STRING,
     COMMENT,
+    WHITESPACE,
     UNDEFINED,
-    EOFILE
+    ENDOF
 };
 
-class Token{
+class Token
+{
 private:
     TokenType type;
     string value;
-    int lineNumber;
+    int line;
 
 public:
-    Token () {type = UNDEFINED, value = "", lineNumber = 0;}
-    Token(TokenType type, const string& value, int lineNumber)
-            : type(type), value(value), lineNumber(lineNumber) {}
-
-
-//            this->type = type;
-//            this->value = value;
-//            this->lineNumber = lineNumber;
+    Token() { type = UNDEFINED, value = "", line = 0; }
+    Token(TokenType type, string value, int line)
+        : type(type), value(value), line(line) {}
 
     TokenType getType() const {
         return type;
@@ -69,15 +65,17 @@ public:
             case (STRING): return "STRING"; break;
             case (COMMENT): return "COMMENT"; break;
             case (UNDEFINED): return "UNDEFINED"; break;
-            case (EOFILE): return "EOF"; break;
+            case (ENDOF): return "EOF"; break;
             default: return "uhhhhhhh"; break;
         }
         return "error";
     }
 
+
     string toString() const {
         stringstream out;
-        out << "(" << typeName(type) << "," << "\"" << value << "\"" << "," << lineNumber << ")";
+        out << "(" << typeName(type) << "," << "\"" << value << "\"" << "," << line << ")";
         return out.str();
     }
+
 };

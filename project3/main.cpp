@@ -1,12 +1,13 @@
-#pragma once
 #include "Tuple.h"
-#include <iostream>
 #include "Scheme.h"
 #include <vector>
 #include "Relation.h"
 #include "Scanner.h"
 #include "Parser.h"
 #include "Interpreter.h"
+#include "fstream"
+#include "Token.h"
+#include <string>
 
 
 using namespace std;
@@ -24,8 +25,8 @@ int main(int argc, char *argv[]) {
     Parser parser(tokens);
     parser.parse();
 
-    DatalogProgram datalogProgram = parser.getDatalogProgram();
-    Interpreter interpreter(datalogProgram);
+    DatalogProgram datalog = parser.getDatalog();
+    Interpreter interpreter(datalog);
 
     interpreter.evaluateQueries();
 

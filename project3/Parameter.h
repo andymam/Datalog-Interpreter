@@ -4,20 +4,20 @@
 #include <string>
 #include <sstream>
 
-using namespace std; 
+using namespace std;
 
 class Parameter {
-private: 
-	string name;
+private:
+    string name;
 
-public: 
-	Parameter(string name) : name(name)  { }
-    
-	void setName(string newName) {
-		name = newName;
-	}
+public:
+    Parameter(string name) : name(name)  { }
 
-	string getName() {
-		return name;
-	}
+    void setName(string newName) {
+        name = newName;
+    }
+
+    string getName() {
+        return name;
+    }
 };

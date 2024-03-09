@@ -5,16 +5,16 @@
 #include <sstream>
 #include "Parameter.h"
 
-using namespace std; 
+using namespace std;
 
 class Predicate {
-private: 
+private:
     string name;
     vector<Parameter> parameters;
 
-public: 
-	Predicate() { }
-	Predicate(string name) : name(name) { }
+public:
+    Predicate() { }
+    Predicate(string name) : name(name) { }
 
     void addParameter(Parameter parameter) {
         parameters.push_back(parameter);
@@ -40,7 +40,7 @@ public:
         return paramStrings;
     }
 
-        
+
     string toString() {
         stringstream out;
         out << name << '(';

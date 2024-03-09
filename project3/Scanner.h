@@ -1,4 +1,5 @@
 #pragma once
+
 #include <string>
 #include <cctype>
 #include <fstream>
@@ -7,15 +8,15 @@
 
 using namespace std;
 
-class Scanner {
+class Scanner
+{
 private:
     string input;
     int line = 1;
     vector<Token> tokens;
 
-
 public:
-    Scanner(const string &input) : input(input), line(1) { }
+    Scanner(const string &input) : input(input), line(1) {}
 
     vector<Token> scanToken() {
 
@@ -160,7 +161,7 @@ public:
             }
             input = input.substr(1, input.length());
         }
-        Token endToken(EOFILE, "", line);
+        Token endToken(ENDOF, "", line);
         tokens.push_back(endToken);
 
         return tokens;
@@ -191,11 +192,11 @@ public:
         }
     }
 
-    int checkString(string str_check) {
-        if (str_check.find('\'') == string::npos) {
+    int checkString(string check) {
+        if (check.find('\'') == string::npos) {
             return -1;
         } else {
-            return str_check.find('\'');
+            return check.find('\'');
         }
     }
 };

@@ -5,42 +5,44 @@
 #include <sstream>
 #include "Predicate.h"
 
-using namespace std; 
+using namespace std;
 
-class Rule {
-private: 
-    Predicate headPred;
-    vector<Predicate> bodyPreds;
-public: 
-	Rule() { }
+class Rule
+{
+private:
+    Predicate headPredicate;
+    vector<Predicate> bodyPredicates;
+
+public:
+    Rule() { }
 
     void setHead(Predicate head) {
-        headPred = head;
+        headPredicate = head;
     }
 
-    Predicate getHeadPred() {
-        return headPred;
-    }
-    
-    void addBodyPreds(Predicate predicate) {
-        bodyPreds.push_back(predicate);
+    Predicate getHead() {
+        return headPredicate;
     }
 
-    vector<Predicate> getBodyPreds() {
-        return bodyPreds;
+    void addBodyPredicate(Predicate predicate) {
+        bodyPredicates.push_back(predicate);
     }
 
-    
+    vector<Predicate> getPredicateList() {
+        return bodyPredicates;
+    }
+
     string toString() {
         stringstream out;
-        out << headPred.toString() << " :- ";
-        for (int i = 0; i < bodyPreds.size(); i++) {
-            out << bodyPreds.at(i).toString();
-            if (i < bodyPreds.size() - 1) {
+        out << headPredicate.toString() << " :- ";
+        for (size_t i = 0; i < bodyPredicates.size(); i++)
+        {
+            out << bodyPredicates.at(i).toString();
+            if (i < bodyPredicates.size() - 1)
+            {
                 out << ',';
             }
         }
-
         return out.str();
     }
 };
