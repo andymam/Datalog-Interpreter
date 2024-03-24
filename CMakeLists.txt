@@ -31,4 +31,11 @@ add_executable(cs236
         project3/main.cpp
         project3/DatalogProgram.h
         project3/Database.h
+        p4-practice/Interpreter.h
+        p4-practice/Predicate.h
+        p4-practice/Parser.h
+        p4-practice/Parameter.h
+        p4-practice/Database.h
+        p4-practice/DatalogProgram.h
+        p4-practice/main.cpp
 )

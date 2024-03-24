@@ -38,6 +38,7 @@ public:
     }
 
     void evaluateQueries() {
+        cout << "Query Evaluation" << endl;
         for (unsigned int i = 0; i < queries.size(); ++i) {
             vector<string> queryVector = queries.at(i).getParamStrings();
             string predName = queries.at(i).getName();
@@ -102,6 +103,7 @@ public:
             Relation relation(schemeName, scheme);
             database.insert(pair<string, Relation>(schemeName, relation));
         }
+
     }
 
     void evaluateFacts() {
@@ -114,12 +116,90 @@ public:
                 string value = factParams.at(j).getName();
                 tuple.push_back(value);
             }
+
             database.at(predName).addTuple(tuple);
         }
     }
 
-//    void evaluateRules() {
-//
-//    }
+    Relation evaluatePredicate(Predicate pred) {
+        Relation relation = database.at(pred.getName());
+        map<string, int> variables;
+        vector<string> variableNames;
 
+        for (unsigned int i = 0; i < pred.getParameters().size(); i++) {
+            Parameter parameter = pred.getParameters().at(i);
+            if (parameter.getName().at(0) == '\'') {
+                relation = relation.select(i, parameter.getName());
+            } else {
+                if (variables.find(parameter.getName()) != variables.end()) {
+                    relation = relation.select(i, variables.at(parameter.getName()));
+                } else {
+                    variables.insert(pair<string, int>(parameter.getName(), i));
+                    variableNames.push_back(parameter.getName());
+                }
+            }
+        }
+        relation = relation.project(variables, variableNames);
+        relation = relation.rename(variableNames);
+        return relation;
+    }
+
+
+    void evaluateRules() {
+        int runs = 0;
+        int preSize;
+        int postSize;
+
+        cout << "Rule Evaluation" << endl;
+
+        do {
+            preSize = database.getSize();
+            for (auto &rule : rules) {
+                cout << rule.toString() << "." << endl;
+                evaluateRule(rule);
+            }
+                postSize = database.getSize();
+                runs++;
+        } while (preSize != postSize);
+
+        cout << endl;
+        cout << "Schemes populated after " << runs << " passes through the Rules.";
+        cout << endl << endl;
+    }
+
+    void evaluateRule(Rule rule) {
+        vector<Relation> relations;
+        map<string, int> variables;
+        vector<string> variableNames;
+        vector<Predicate> predicates = rule.getPredicateList();
+
+        for (unsigned int i = 0; i < predicates.size(); i++) {
+            Relation relation = evaluatePredicate(predicates.at(i));
+            relations.push_back(relation);
+        }
+
+        Relation joinedRelation = relations.at(0);
+
+        for (unsigned int i = 0; i < relations.size(); i++) {
+            joinedRelation = joinedRelation.join(relations.at(i));
+        }
+
+        for (unsigned int i = 0; i < rule.getHead().getParameters().size(); i++) {
+            for (unsigned j = 0; j < joinedRelation.getScheme().size(); j++) {
+                Predicate predicate = rule.getHead();
+                string parameterName = joinedRelation.getScheme().at(j);
+                vector<Parameter> parameters = predicate.getParameters();
+                Parameter otherParameter = parameters.at(i);
+                string otherParameterName = otherParameter.getName();
+
+                if (parameterName == otherParameterName) {
+                    variables.insert(pair<string, int>(otherParameterName, j));
+                    variableNames.push_back(otherParameterName);
+                }
+            }
+        }
+        Relation newRelation = joinedRelation.project(variables, variableNames);
+        newRelation = newRelation.rename(variableNames);
+        database.at(rule.getHead().getName()).unite(newRelation);
+    }
 };
