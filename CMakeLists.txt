@@ -38,4 +38,9 @@ add_executable(cs236
         p4-practice/Database.h
         p4-practice/DatalogProgram.h
         p4-practice/main.cpp
+        project5/Node.h
+        project5/Graph.h
+        project5/Rule.h
+        project5/Interpreter.h
+        project5/Rule.h
 )

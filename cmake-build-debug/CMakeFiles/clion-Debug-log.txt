@@ -1,4 +1,13 @@
 /Applications/CLion.app/Contents/bin/cmake/mac/aarch64/bin/cmake -DCMAKE_BUILD_TYPE=Debug -DCMAKE_MAKE_PROGRAM=/Applications/CLion.app/Contents/bin/ninja/mac/aarch64/ninja -G Ninja -S /Users/andymam/Desktop/cs236 -B /Users/andymam/Desktop/cs236/cmake-build-debug
 -- Configuring done (0.0s)
--- Generating done (0.0s)
--- Build files have been written to: /Users/andymam/Desktop/cs236/cmake-build-debug
+CMake Error at CMakeLists.txt:10 (add_executable):
+  Cannot find source file:
+
+    p4-practice/Interpreter.h
+
+
+CMake Error at CMakeLists.txt:10 (add_executable):
+  No SOURCES given to target: cs236
+
+
+CMake Generate step failed.  Build files cannot be regenerated correctly.
