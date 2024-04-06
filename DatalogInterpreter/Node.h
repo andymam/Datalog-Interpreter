@@ -15,11 +15,24 @@ class Node {
 private:
 
     set<int> adjacentNodeIDs;
+    bool visitedFlag;
 
 public:
 
     void addEdge(int adjacentNodeID) {
         adjacentNodeIDs.insert(adjacentNodeID);
+    }
+
+    void setVisited(bool value) {
+        visitedFlag = value;
+    }
+
+    bool visited() {
+        return visitedFlag;
+    }
+
+    set<int> getEdges() {
+        return adjacentNodeIDs;
     }
 
     string toString() {
